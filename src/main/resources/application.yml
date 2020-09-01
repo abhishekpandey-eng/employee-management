@@ -1,0 +1,37 @@
+server:
+  port: 8081
+
+spring:
+  profiles:
+   active: dev
+
+---
+
+spring:
+  profiles: dev
+  app: 
+    sourceFile: dir/employee.csv
+    outputFailureResponse: dir/failure-response.csv
+  datasource:
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+    password: root
+    url: jdbc:postgresql://localhost:5432/employee-mgmt
+    driver-class-name: 
+    username: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect 
+  cache:
+    prefix: employee-place
+    ttl: 300000
+  redis: 
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    timeout: 60000 
