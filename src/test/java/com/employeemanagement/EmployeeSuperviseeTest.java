@@ -31,7 +31,7 @@ public class EmployeeSuperviseeTest {
 		List<Employee> employees = getInputEmployeeList();
 		Mockito.when(employeeRepository.findSuperviseeList(1L)).thenReturn(employees);
 	
-		Assert.assertEquals(employeeService.getEmployeeHierarcyDiagram(1L), "Vivek->Abhishek->Deepak,Pawan->Razi->");
+		Assert.assertEquals(employeeService.getEmployeeHierarcyDiagram(1L), "Vivek->Abhishek->Deepak->Pawan,Razi->");
 	}
 	
 	@SuppressWarnings("serial")
@@ -57,7 +57,7 @@ public class EmployeeSuperviseeTest {
 		Employee pawan = new Employee() {{
 			setId(4L);
 			setEmployeeName("Pawan");
-			setSupervisorId(2);
+			setSupervisorId(3);
 		}};
 		
 		Employee razi = new Employee() {{

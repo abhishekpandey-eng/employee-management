@@ -18,6 +18,9 @@ import com.employeemanagement.models.Employee;
 import com.employeemanagement.services.IEmployeeService;
 import com.employeemanagement.utilities.IApplicationConstant;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 public class EmployeeController {
 
@@ -31,7 +34,8 @@ public class EmployeeController {
 	 * @return
 	 */
 	@PutMapping("/employee/place/{place}/salary/{percentage}")
-	public ResponseEntity<List<Employee>> incrementSalary(@PathVariable String place, @PathVariable float percentage) {
+	@ApiOperation(value = "increment the salary of employee of given place with given percentage", response = List.class)
+	public ResponseEntity<List<Employee>> incrementSalary(@PathVariable @ApiParam(value = "location of an employee", required = true, type = "String") String place, @PathVariable @ApiParam(value = "percentage for salary increment", required = true, example = "40", type = "float") float percentage) {
 		List<Employee> employees = employeeService.incrementEmployeeSalary(place, percentage);
 
 		if (CollectionUtils.isEmpty(employees))
@@ -41,7 +45,8 @@ public class EmployeeController {
 	}
 
 	@GetMapping("/employee/place/{place}")
-	public ResponseEntity<List<Employee>> getEmployeesByPlace(@PathVariable String place) {
+	@ApiOperation(value = "return the list of employee by given place", response = List.class)
+	public ResponseEntity<List<Employee>> getEmployeesByPlace(@PathVariable @ApiParam(value = "location of an employee", required = true, type = "String", example = "Lko") String place) {
 		List<Employee> employees = employeeService.getEmployees(place);
 
 		if (CollectionUtils.isEmpty(employees))
@@ -56,7 +61,8 @@ public class EmployeeController {
 	 * @return hierarchical diagram from parent to childs 
 	 */
 	@GetMapping("/employee/supervisee/{employeeId}")
-	public ResponseEntity<String> getEmployeeSupervisee(@PathVariable Long employeeId) {
+	@ApiOperation(value = "return the string representing hierarchy diagram of given employee id", response = String.class)
+	public ResponseEntity<String> getEmployeeSupervisee(@PathVariable @ApiParam(value = "id of an employee", required = true, type = "Long", example = "1") Long employeeId) {
 		String supervisee = employeeService.getEmployeeHierarcyDiagram(employeeId);
 
 		if (StringUtils.isEmpty(supervisee))
@@ -72,7 +78,8 @@ public class EmployeeController {
 	 * @return
 	 */
 	@GetMapping("/employee/salary")
-	public ResponseEntity<EmployeeAggregateResponse> getEmployeesSalaryByProperty(@RequestParam String property, @RequestParam String propertyValue) {
+	@ApiOperation(value = "return the property value and total salary based on the property", response = EmployeeAggregateResponse.class)
+	public ResponseEntity<EmployeeAggregateResponse> getEmployeesSalaryByProperty(@RequestParam @ApiParam(value = "property by which we need total salary", required = true, type = "String", example = "bu") String property, @ApiParam(value = "value of given property", required = true, type = "String", example = "RND") @RequestParam String propertyValue) {
 		
 		if(!IApplicationConstant.searchParams.containsKey(property.toUpperCase()))
 			throw new InvalidInputException("given field not supported !!");
@@ -82,7 +89,8 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("/employee/title/{title}/salary-range")
-	public ResponseEntity<EmployeeSalaryRange> getEmployeesSalaryRange(@PathVariable String title) {		
+	@ApiOperation(value = "return the minimum and maximum salary of given title", response = EmployeeSalaryRange.class)
+	public ResponseEntity<EmployeeSalaryRange> getEmployeesSalaryRange(@PathVariable @ApiParam(value = "title of an employees", required = true, type = "String", example = "SDE2") String title) {		
 		EmployeeSalaryRange response = employeeService.salaryRangeByTitle(title);
 		return new ResponseEntity<EmployeeSalaryRange>(response, HttpStatus.OK);
 	}

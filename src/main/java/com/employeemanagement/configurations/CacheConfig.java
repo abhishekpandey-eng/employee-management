@@ -43,7 +43,7 @@ public class CacheConfig {
 		cacheConfiguration = cacheConfiguration.entryTtl(Duration.ofMinutes(5));
 
 		Map<String, RedisCacheConfiguration> cacheNamesConfigurationMap = new HashMap<>();
-		cacheNamesConfigurationMap.put("employee-place", cacheConfiguration);
+		cacheNamesConfigurationMap.put(employeeCachePrefix, cacheConfiguration);
 
 		RedisCacheManager redisCacheManager = new RedisCacheManager(redisCacheWriter, cacheConfiguration,
 				cacheNamesConfigurationMap);
