@@ -17,7 +17,6 @@ import com.employeemanagement.exceptions.InvalidInputException;
 import com.employeemanagement.models.Employee;
 import com.employeemanagement.services.IEmployeeService;
 import com.employeemanagement.utilities.IApplicationConstant;
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -35,7 +34,10 @@ public class EmployeeController {
 	 */
 	@PutMapping("/employee/place/{place}/salary/{percentage}")
 	@ApiOperation(value = "increment the salary of employee of given place with given percentage", response = List.class)
-	public ResponseEntity<List<Employee>> incrementSalary(@PathVariable @ApiParam(value = "location of an employee", required = true, type = "String") String place, @PathVariable @ApiParam(value = "percentage for salary increment", required = true, example = "40", type = "float") float percentage) {
+	public ResponseEntity<List<Employee>> incrementSalary(@PathVariable @ApiParam(value = "location of an employee", required = true, type = "String", example = "Delhi") String place, @PathVariable @ApiParam(value = "percentage for salary increment", required = true, example = "40", type = "float") float percentage) {
+		if(percentage <= 0.0F)
+			throw new InvalidInputException("percentage must be greater than 0");
+		
 		List<Employee> employees = employeeService.incrementEmployeeSalary(place, percentage);
 
 		if (CollectionUtils.isEmpty(employees))

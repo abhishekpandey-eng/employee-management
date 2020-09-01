@@ -118,6 +118,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
 	public String getEmployeeHierarcyDiagram(Long employeeId) {
 		List<Employee> employeeHierarchy = employeeRepository.findSuperviseeList(employeeId);
 		
+		if(CollectionUtils.isEmpty(employeeHierarchy))
+			throw new NotFoundException("employee not found for given id !!"); 
+		
 		Map<Long, String> idNamemap = employeeHierarchy.stream()
 				.collect(Collectors.toMap(Employee::getId, Employee::getEmployeeName));
 		Map<String, List<String>> mangerEmployeeMap = new LinkedHashMap<>();
